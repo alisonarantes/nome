@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Nomenclatura RNP/PoP</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Nomenclatura</h1>
+            <p>Padrão de Descritivos RNP / PoP (VLAN, Interfaces, SNMP)</p>
+        </header>
+
+        <div style="padding: 1rem 2rem 0; border-bottom: 1px solid var(--border-color);">
+            <div class="form-group">
+                <label for="vendor-select">Gerar Configuração para:</label>
+                <select id="vendor-select">
+                    <option value="none">Somente Texto (Padrão)</option>
+                    <option value="huawei">Huawei</option>
+                    <option value="extreme">Extreme</option>
+                    <option value="juniper">Juniper</option>
+                    <option value="cisco">Cisco</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="tab-snmp">SNMP Location</button>
+            <button class="tab-btn" data-target="tab-vlan">VLAN Name</button>
+            <button class="tab-btn" data-target="tab-interface">Interface Desc.</button>
+        </div>
+
+        <!-- SNMP Content -->
+        <div id="tab-snmp" class="tab-content active">
+            <div class="form-group">
+                <label for="snmp-org">Organização e Unidade
+                    <span class="required-mark">*</span>
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Nome da organização e unidade. Ex: IFSC-LAGES</span>
+                    </span>
+                </label>
+                <input type="text" id="snmp-org" placeholder="Ex: IFSC-LAGES" required>
+                <div class="helper-text">Separar por hífen. Sem espaços.</div>
+            </div>
+            <div class="form-group">
+                <label for="snmp-lat">Latitude
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Latitude em graus decimais. Ex: -27.80531</span>
+                    </span>
+                </label>
+                <input type="number" id="snmp-lat" step="any" min="-90" max="90" placeholder="Ex: -27.80531">
+            </div>
+            <div class="form-group">
+                <label for="snmp-long">Longitude
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Longitude em graus decimais. Ex: -50.94666</span>
+                    </span>
+                </label>
+                <input type="number" id="snmp-long" step="any" min="-180" max="180" placeholder="Ex: -50.94666">
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Comandos Para Aplicação</span>
+                <div id="snmp-context" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="snmp-context">Copiar Comandos</button>
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Resultado - SNMP Location</span>
+                <div id="snmp-output" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="snmp-output">Copiar Padrão</button>
+            </div>
+        </div>
+
+        <!-- VLAN Content -->
+        <div id="tab-vlan" class="tab-content">
+            <div class="form-group">
+                <label for="vlan-finality">Finalidade
+                    <span class="required-mark">*</span>
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Propósito da VLAN (Ex: PTP, Cliente...)</span>
+                    </span>
+                </label>
+                <select id="vlan-finality" required>
+                    <option value="PTP">PTP - Ponto-a-ponto</option>
+                    <option value="CLI">CLI - Cliente</option>
+                    <option value="INF">INF - Infraestrutura</option>
+                    <option value="GER">GER - Gerência</option>
+                    <option value="HOM">HOM - Homologação</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="vlan-service">Nome do Serviço <span class="optional">(Condicional)</span></label>
+                <input type="text" id="vlan-service" placeholder="Ex: L2VPN, VPN">
+            </div>
+            <div class="form-group">
+                <label for="vlan-inst">Instituição - Unidade <span class="optional">(Condicional)</span></label>
+                <input type="text" id="vlan-inst" placeholder="Ex: IFRN-LAJES">
+            </div>
+            <div class="form-group">
+                <label for="vlan-oper">Nome Operadora <span class="optional">(Condicional)</span></label>
+                <input type="text" id="vlan-oper" placeholder="Ex: TELY">
+            </div>
+            <div class="form-group">
+                <label for="vlan-id">VLAN ID <span class="optional">(Opcional)</span>
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Número da VLAN (1-4094)</span>
+                    </span>
+                </label>
+                <input type="number" id="vlan-id" min="1" max="4094" placeholder="Ex: 3220">
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Comandos Para Aplicação</span>
+                <div id="vlan-context" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="vlan-context">Copiar Comandos</button>
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Resultado - VLAN Name</span>
+                <div id="vlan-output" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="vlan-output">Copiar Padrão</button>
+            </div>
+        </div>
+
+        <!-- Interface Content -->
+        <div id="tab-interface" class="tab-content">
+            <div class="form-group">
+                <label for="if-local">Interface Local
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Nome da interface no equipamento local. Ex: GigabitEthernet0/1</span>
+                    </span>
+                </label>
+                <input type="text" id="if-local" placeholder="Ex: GigabitEthernet0/1">
+            </div>
+            <div class="form-group">
+                <label for="if-type">Tipo de Interface (T)
+                    <span class="required-mark">*</span>
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Tipo da conexão (Cliente, Infra, etc)</span>
+                    </span>
+                </label>
+                <select id="if-type" required>
+                    <option value="CLI">CLI - Cliente</option>
+                    <option value="PAR">PAR - Parceiro</option>
+                    <option value="OPE">OPE - Operadora</option>
+                    <option value="INF">INF - Infraestrutura</option>
+                    <option value="LOC">LOC - Local (Loopback/Mgmt)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="if-remote-org">Organização Remota (O)
+                    <span class="required-mark">*</span>
+                    <span class="tooltip">
+                        <span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">Nome da organização na ponta remota</span>
+                    </span>
+                </label>
+                <input type="text" id="if-remote-org" placeholder="Ex: RNP, POP" required>
+            </div>
+            <div class="form-group">
+                <label for="if-remote-equip">Equipamento Remoto (E) <span class="optional">(Físico:
+                        Obrigatório)</span></label>
+                <input type="text" id="if-remote-equip" placeholder="Ex: CXX1, XX-POP-BR-RT2">
+            </div>
+            <div class="form-group">
+                <label for="if-remote-if">Interface Remota (I) <span class="optional">(Se E definido)</span></label>
+                <input type="text" id="if-remote-if" placeholder="Ex: ET-2/0/1">
+            </div>
+            <div class="form-group">
+                <label for="if-service">Serviço (S) <span class="optional">(Opcional)</span></label>
+                <input type="text" id="if-service" placeholder="Ex: L2, PTP, IP, L3VPN">
+            </div>
+            <div class="form-group">
+                <label for="if-internal-id">ID Interno (ID) <span class="optional">(Opcional)</span></label>
+                <input type="text" id="if-internal-id" placeholder="Ex: Designador">
+            </div>
+            <div class="form-group">
+                <label for="if-bandwidth">Banda (B) <span class="optional">(Opcional)</span></label>
+                <input type="text" id="if-bandwidth" placeholder="Ex: 10G, 100M">
+            </div>
+            <div class="form-group">
+                <label for="if-comment">Comentário (C) <span class="optional">(Opcional)</span></label>
+                <input type="text" id="if-comment" placeholder="Ex: Comentários livres ou Tags Privadas">
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Comandos Para Aplicação</span>
+                <div id="if-context" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="if-context">Copiar Comandos</button>
+            </div>
+
+            <div class="result-area">
+                <span class="result-label">Resultado - Interface Description</span>
+                <div id="if-output" class="output-code"></div>
+                <button class="copy-btn" data-copy-target="if-output">Copiar Padrão</button>
+            </div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
