@@ -3,23 +3,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.tab-content');
 
+    // Restore saved tab
+    const savedTab = localStorage.getItem('activeTab');
+    if (savedTab) {
+        const targetBtn = document.querySelector(`.tab-btn[data-target="${savedTab}"]`);
+        const targetContent = document.getElementById(savedTab);
+
+        if (targetBtn && targetContent) {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            targetBtn.classList.add('active');
+            targetContent.classList.add('active');
+        }
+    }
+
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
 
             tab.classList.add('active');
-            document.getElementById(tab.dataset.target).classList.add('active');
+            const targetId = tab.dataset.target;
+            document.getElementById(targetId).classList.add('active');
+            localStorage.setItem('activeTab', targetId);
         });
     });
 
     // Vendor Selection Logic
+    // Vendor Selection Logic
     const vendorSelect = document.getElementById('vendor-select');
-    vendorSelect.addEventListener('change', () => {
+
+    // Restore saved vendor
+    const savedVendor = localStorage.getItem('selectedVendor');
+    if (savedVendor) {
+        vendorSelect.value = savedVendor;
+    }
+
+    const updateVendor = () => {
         generateSNMP();
         generateVLAN();
         generateInterface();
-    });
+        localStorage.setItem('selectedVendor', vendorSelect.value);
+    };
+
+    vendorSelect.addEventListener('change', updateVendor);
 
     // Generator Logic
 
