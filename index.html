@@ -57,7 +57,7 @@
                         <span class="tooltip-text">Latitude em graus decimais. Ex: -27.80531</span>
                     </span>
                 </label>
-                <input type="number" id="snmp-lat" step="any" min="-90" max="90" placeholder="Ex: -27.80531">
+                <input type="number" id="snmp-lat" step="0.00001" min="-90" max="90" placeholder="Ex: -27.80531">
             </div>
             <div class="form-group">
                 <label for="snmp-long">Longitude
@@ -66,7 +66,7 @@
                         <span class="tooltip-text">Longitude em graus decimais. Ex: -50.94666</span>
                     </span>
                 </label>
-                <input type="number" id="snmp-long" step="any" min="-180" max="180" placeholder="Ex: -50.94666">
+                <input type="number" id="snmp-long" step="0.00001" min="-180" max="180" placeholder="Ex: -50.94666">
             </div>
 
             <div class="result-area">
@@ -102,7 +102,13 @@
             </div>
             <div class="form-group">
                 <label for="vlan-service">Nome do Serviço <span class="optional">(Condicional)</span></label>
-                <input type="text" id="vlan-service" placeholder="Ex: L2VPN, VPN">
+                <select id="vlan-service">
+                    <option value="">Selecione...</option>
+                    <option value="L2">L2</option>
+                    <option value="PTP">PTP</option>
+                    <option value="IP">IP</option>
+                    <option value="L3VPN">L3VPN</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="vlan-inst">Instituição - Unidade <span class="optional">(Condicional)</span></label>
@@ -183,7 +189,13 @@
             </div>
             <div class="form-group">
                 <label for="if-service">Serviço (S) <span class="optional">(Opcional)</span></label>
-                <input type="text" id="if-service" placeholder="Ex: L2, PTP, IP, L3VPN">
+                <select id="if-service">
+                    <option value="">Selecione...</option>
+                    <option value="L2">L2</option>
+                    <option value="PTP">PTP</option>
+                    <option value="IP">IP</option>
+                    <option value="L3VPN">L3VPN</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="if-internal-id">ID Interno (ID) <span class="optional">(Opcional)</span></label>

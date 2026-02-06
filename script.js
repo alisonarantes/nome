@@ -26,7 +26,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- SNMP Location ---
     const snmpInputs = ['snmp-org', 'snmp-lat', 'snmp-long'];
     snmpInputs.forEach(id => {
-        document.getElementById(id)?.addEventListener('input', generateSNMP);
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', generateSNMP);
+
+        if (id === 'snmp-org') {
+            el.addEventListener('blur', (e) => {
+                const val = e.target.value.trim().toUpperCase();
+                const regex = /^[A-Z0-9]+-[A-Z0-9]+$/;
+                const helper = el.parentElement.querySelector('.helper-text');
+
+                if (val && !regex.test(val)) {
+                    el.classList.add('input-error');
+                    if (helper) helper.classList.add('error-msg');
+                } else {
+                    el.classList.remove('input-error');
+                    if (helper) helper.classList.remove('error-msg');
+                }
+            });
+
+            // Also clear error on input
+            el.addEventListener('input', () => {
+                el.classList.remove('input-error');
+                const helper = el.parentElement.querySelector('.helper-text');
+                if (helper) helper.classList.remove('error-msg');
+            });
+        }
+
+        if (id === 'snmp-lat' || id === 'snmp-long') {
+            el.addEventListener('blur', (e) => {
+                const val = parseFloat(e.target.value);
+                if (!isNaN(val)) {
+                    e.target.value = val.toFixed(5);
+                    generateSNMP();
+                }
+            });
+        }
     });
 
     function generateSNMP() {
@@ -124,7 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Interface ---
     const ifInputs = ['if-local', 'if-type', 'if-remote-org', 'if-remote-equip', 'if-remote-if', 'if-service', 'if-internal-id', 'if-bandwidth', 'if-comment'];
     ifInputs.forEach(id => {
-        document.getElementById(id)?.addEventListener('input', generateInterface);
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', generateInterface);
+            el.addEventListener('change', generateInterface);
+        }
     });
 
     function generateInterface() {

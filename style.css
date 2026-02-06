@@ -50,6 +50,7 @@ header h1 {
     font-weight: 700;
     margin-bottom: 0.5rem;
     background: linear-gradient(to right, #60a5fa, #34d399);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -271,4 +272,18 @@ select option {
     font-size: 0.8rem;
     color: var(--text-muted);
     margin-top: 0.25rem;
+}
+
+/* Validation Error State */
+.input-error {
+    border-color: #ef4444 !important;
+    background-color: #fef2f2;
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.helper-text.error-msg {
+    color: #ef4444;
 }
